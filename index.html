@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>2026教師節-我的主打歌6</title>
+    <title>2026教師節-AI的主打歌6</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700;900&display=swap" rel="stylesheet">
     
@@ -49,29 +49,35 @@
             box-shadow: inset 0 4px 15px rgba(0,0,0,0.4);
             border: 1px solid rgba(255,255,255,0.05);
             overflow-y: auto;
-            -webkit-mask-image: linear-gradient(to bottom, transparent 0%, black 15%, black 85%, transparent 100%);
-            mask-image: linear-gradient(to bottom, transparent 0%, black 15%, black 85%, transparent 100%);
-            -ms-overflow-style: none;  
-            scrollbar-width: none;  
+            /* 縮小遮罩範圍，讓純文字閱讀更舒適 */
+            -webkit-mask-image: linear-gradient(to bottom, transparent 0%, black 5%, black 95%, transparent 100%);
+            mask-image: linear-gradient(to bottom, transparent 0%, black 5%, black 95%, transparent 100%);
+            /* 開啟捲軸支援 (移除隱藏捲軸的屬性) */
+            scrollbar-width: thin;
+            scrollbar-color: rgba(255,255,255,0.2) transparent;
         }
 
+        /* 針對 Webkit 瀏覽器客製化捲軸樣式 */
         .lyrics-wrapper::-webkit-scrollbar { 
-            display: none; 
+            width: 6px; 
+        }
+        .lyrics-wrapper::-webkit-scrollbar-track {
+            background: transparent;
+        }
+        .lyrics-wrapper::-webkit-scrollbar-thumb {
+            background-color: rgba(255, 255, 255, 0.2);
+            border-radius: 10px;
+        }
+        .lyrics-wrapper::-webkit-scrollbar-thumb:hover {
+            background-color: rgba(255, 255, 255, 0.4);
         }
 
         .lyrics-container {
-            padding: 10vh 0; /* 縮小上下間距，因為不需要強制置中 */
+            padding: 20px 0; /* 移除原本為了置中而留下的大量空白，改為正常間距 */
         }
 
         .lyric-line {
             transition: color 0.3s ease, text-shadow 0.3s ease, transform 0.3s ease;
-        }
-
-        /* Active Lyric KTV Glowing Effect */
-        .lyric-line.active {
-            color: #00a8ff; 
-            text-shadow: 0px 0px 12px rgba(0, 168, 255, 0.8), 0px 0px 2px rgba(255, 255, 255, 0.5);
-            transform: scale(1.02); /* Slight pop to emphasize the active line */
         }
 
         /* Progress Bar Styling */
@@ -162,20 +168,443 @@
 
     <script>
         const mediaDatabase = {
-            "1": {
-                coverUrl: "https://picsum.photos/400/400?random=1", 
-                audioUrl: "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3",
-                lrc: `
-[00:00.00] 準備播放：我的主題曲
-[00:05.00] 這次，字體不會再放大了
-[00:10.50] 而是呈現清楚的KTV亮藍色與發光感
-[00:15.20] 你可以試著用滑鼠(或手指)上下拖曳這段歌詞
-[00:20.00] 音樂會超級滑順地跟著你的拖曳來快轉或倒轉
-[00:25.50] 這就是頂級音樂App的操作體驗
-[00:30.00] 放開手指後，系統會自動接手捲動
-[00:35.00] 享受這段專屬於你的旋律
-                `
-            }
+           
+     "1": {
+        coverUrl: "簡瑞男.png",
+        audioUrl: "簡瑞男.mp3",
+        lyricsText: `
+[Verse 1]
+戴著眼鏡 溫暖的目光
+穿上印著小車的白T恤 站在講堂
+瑞男老師 帶著微笑的臉龐
+像春天的櫻花 靜靜綻放
+
+[Chorus]
+一步一步 慢慢走不要慌
+特教的路 有你指引方向
+齒輪轉動著 愛心在發光
+你是守護孩子們 最溫柔的太陽
+
+[Verse 2]
+手繪的小車 承載著夢想
+聽那音符在雲朵間 快樂飛揚
+你用耐心和愛 畫出星光
+陪伴著每個獨特的心靈 飛翔
+
+[Chorus]
+一步一步 慢慢走不要慌
+特教的路 有你指引方向
+齒輪轉動著 愛心在發光
+你是守護孩子們 最溫柔的太陽
+
+[Outro]
+瑞男老師 謝謝你的光芒
+讓每個慢飛的天使 都有了翅膀
+溫暖的歌聲 永遠在心底 迴響
+`
+    },
+
+    "2": {
+        coverUrl: "藍秀美.png",
+        audioUrl: "藍秀美.mp3",
+        lyricsText: `
+[Verse 1]
+微捲的長髮 伴著溫暖目光
+黑色的T恤 閃爍彩色的光芒
+秀美老師的笑容 像冬日太陽
+照亮身旁 那些慢飛的天使與希望
+
+[Chorus]
+藍秀美老師 牽著我們的手一步步走
+像夜空繁星 點亮每個獨特的宇宙
+用無比的耐心 聽懂我們的歌聲
+愛是妳最美麗的語言 溫暖著心中
+
+[Verse 2]
+手繪的星空 還有小鳥在歌唱
+妳用愛包容 陪伴我們慢慢成長
+不論路有多長 都有妳在身旁
+輕輕拍拍肩膀 給予無限力量
+
+[Chorus]
+藍秀美老師 牽著我們的手一步步走
+像夜空繁星 點亮每個獨特的宇宙
+用無比的耐心 聽懂我們的歌聲
+愛是妳最美麗的語言 溫暖著心中
+
+[Outro]
+謝謝您的愛 秀美老師
+像天空的雲朵 溫柔地守護
+我們會帶著光 勇敢地飛翔
+`
+    },
+
+    "3": {
+        coverUrl: "藍珮文.png",
+        audioUrl: "藍珮文.mp3",
+        lyricsText: `
+[Verse 1]
+戴著眼鏡 笑瞇瞇
+珮文老師 帶咱作伙去旅行
+孭著背包 企在講台頂
+用台語講出最美麗的詩意
+
+[Chorus]
+阮最喜愛的台語課
+聽珮文老師 講古講故事
+一步一步 慢慢行
+歌聲傳過每一座山嶺
+
+[Verse 2]
+高領外套 暖烘烘
+黑色的秀髮 飄逸真迷人
+「喜」字寫在 咱的心肝底
+教咱愛惜這塊土地的歌
+
+[Chorus]
+阮最喜愛的台語課
+聽珮文老師 講古講故事
+一步一步 慢慢行
+歌聲傳過每一座山嶺
+
+[Outro]
+多謝老師 帶阮去旅行
+台語的歌 阮會一直唱落去
+珮文老師 多謝您
+`
+    },
+
+    "4": {
+        coverUrl: "顏廷伍.png",
+        audioUrl: "顏廷伍.mp3",
+        lyricsText: `
+[Verse 1]
+戴上毛帽 框起黑框眼鏡
+廷伍老師 手裡拿著相機
+黃色背心 裝滿了藝術的靈感
+按下快門 留住最美的瞬間
+
+[Chorus]
+哢嚓一聲 世界變成了畫卷
+藝術課堂 創意正在蔓延
+顏老師的鏡頭 記錄青春的笑臉
+光影交織 寫下我們的詩篇
+
+[Verse 2]
+櫻花飄落 飛鶴掠過天邊
+腦袋裡的燈泡 閃爍著新發現
+不只是攝影 更是生活的藝術
+跟著大師腳步 發現美的溫度
+
+[Chorus]
+哢嚓一聲 世界變成了畫卷
+藝術課堂 創意正在蔓延
+顏老師的鏡頭 記錄青春的笑臉
+光影交織 寫下我們的詩篇
+
+[Outro]
+調整焦距 定格這瞬間
+顏廷伍老師 帶我們看見
+最美的畫面
+`
+    },
+
+    "5": {
+        coverUrl: "蘇千惠.png",
+        audioUrl: "蘇千惠.mp3",
+        lyricsText: `
+[Verse 1]
+圓圓的眼鏡 閃爍著溫柔光芒
+無袖碎花襯衫 散發夏日芬芳
+千惠老師走進教室 琴聲開始飛揚
+手錶滴答滴答 記錄著快樂時光
+
+[Chorus]
+Do Re Mi Fa Sol 聽音符在唱歌
+千惠老師的音樂課 充滿了歡樂
+用溫暖的笑容 融化所有課業的憂愁
+跟著旋律 讓我們一起拍拍手
+
+[Verse 2]
+黑板上的五線譜 像小貓在跳舞
+妳用最美的歌聲 帶領我們尋路
+指尖輕輕彈奏 喚醒沉睡的音符
+這堂課的魔法 讓人忘記了辛苦
+
+[Chorus]
+Do Re Mi Fa Sol 聽音符在唱歌
+千惠老師的音樂課 充滿了歡樂
+用溫暖的笑容 融化所有課業的憂愁
+跟著旋律 讓我們一起拍拍手
+
+[Outro]
+謝謝千惠老師 帶給我們音樂的力量
+這首歌 永遠在我們心中 輕輕唱
+La La La... 幸福的樂章
+`
+    },
+
+    "6": {
+        coverUrl: "蘇勝祥.png",
+        audioUrl: "蘇勝祥.mp3",
+        lyricsText: `
+[Verse 1]
+黑色的T恤 俐落的身影
+手錶滴答滴 記錄著我們的回憶
+高年級的教室裡 總有你托著下巴的專注神情
+蘇勝祥老師 用智慧帶領我們前行
+
+[Chorus]
+勝祥老師 像朋友一樣溫暖的陽光
+指引我們 飛向那更遠的地方
+不怕挫折 有你在身旁
+我們是高年級 最驕傲的模樣
+
+[Verse 2]
+黑板上的粉筆 寫下成長的秘笈
+你總是笑著傾聽 那些青春的小秘密
+成熟的目光裡 裝滿了對我們的期許
+拍拍肩膀 鼓勵我們勇敢做自己
+
+[Chorus]
+勝祥老師 像朋友一樣溫暖的陽光
+指引我們 飛向那更遠的地方
+不怕挫折 有你在身旁
+我們是高年級 最驕傲的模樣
+
+[Outro]
+謝謝你 蘇老師
+帶領我們 迎風啟航
+這份溫暖 我們永遠不會忘
+`
+    },
+
+    "7": {
+        coverUrl: "RICA.png",
+        audioUrl: "RICA.mp3",
+        lyricsText: `
+[Verse 1]
+戴著圓圓眼鏡 溫暖的笑容
+穿上彩色條紋 活力在跳動
+Rica 老師走進 教室的午後
+ABC 變得像 唱歌一樣輕鬆
+
+[Chorus]
+Oh Rica Rica 溫暖的陽光
+用最親切的英文 帶我們去翱翔
+身邊圍繞著貓咪 還有熱騰騰的麵香
+妳的課堂 永遠充滿笑聲和希望
+
+[Verse 2]
+自信雙手交叉 眼神好溫柔
+櫻花飄落 伴隨音符在指尖流動
+不只教著單字 還分享生活感動
+聽妳說話 就像微風吹過心頭
+
+[Chorus]
+Oh Rica Rica 溫暖的陽光
+用最親切的英文 帶我們去翱翔
+身邊圍繞著貓咪 還有熱騰騰的麵香
+妳的課堂 永遠充滿笑聲和希望
+
+[Outro]
+Thank you, Rica! 我們的最愛
+手牽著手 迎向美好的未來
+最棒的老師 Rica!
+`
+    },
+
+    "8": {
+        coverUrl: "林娣汎.png",
+        audioUrl: "林娣汎.mp3",
+        lyricsText: `
+[Verse 1]
+俐落短髮 帶著溫暖笑容
+穿上紅色T恤 牽起我們的小手
+娣汎老師 就像溫柔的微風
+帶領我們走進 奇幻的童話宇宙
+
+[Chorus]
+一層一層 挖出泥土裡的寶藏
+櫻花飄落 還有小精靈在歌唱
+娣汎老師 抱抱 每天都充滿陽光
+有妳陪伴的幼兒園 是最快樂的天堂
+
+[Verse 2]
+看看書本 聽聽海浪的歌聲
+桌上的熱咖啡 飄散著溫暖香氣
+妳用耐心 傾聽我們的悄悄話
+手牽著手 一起慢慢地長大
+
+[Chorus]
+一層一層 挖出泥土裡的寶藏
+櫻花飄落 還有小精靈在歌唱
+娣汎老師 抱抱 每天都充滿陽光
+有妳陪伴的幼兒園 是最快樂的天堂
+
+[Outro]
+大手拉小手 老師謝謝妳
+最愛的林娣汎老師
+明天我們還要一起玩耍喔！
+`
+    },
+
+    "9": {
+        coverUrl: "RUBY.png",
+        audioUrl: "RUBY.mp3",
+        lyricsText: `
+[Verse 1]
+跨越海洋 帶著西雅圖的微風
+條紋襯衫上 盛開著繽紛花朵
+黑髮下的笑眼 彎成月亮的溫柔
+Ruby老師 帶來最溫暖的問候
+
+[Chorus]
+Hello! Good morning! 甜美的笑容
+跟著ETA 探索世界的彩虹
+A B C D 快樂在空中跳動
+手牽著手 冒險不怕雨落
+
+[Verse 2]
+星星與愛心 在身旁閃爍
+輕鬆的穿搭 像朋友般灑脫
+妳用耐心 融化所有的懵懂
+把美語的種子 播撒在我們心中
+
+[Chorus]
+Hello! Good morning! 甜美的笑容
+跟著ETA 探索世界的彩虹
+A B C D 快樂在空中跳動
+手牽著手 冒險不怕雨落
+
+[Outro]
+來自西雅圖的陽光
+Ruby 老師 照亮我們的課堂
+Thank you, we love you!
+永遠閃亮
+`
+    },
+
+
+// 注意：江明甡 在原始 Word 未提供網址與 ID；僅依原順序保留於此，不代表歸屬本區塊。
+// 原表格第 24 列：江明甡（網址／ID 空白，保留待補；未產生虛構 ID）
+/*
+    "10": {
+        coverUrl: "江明甡.png",
+        audioUrl: "江明甡.mp3",
+        lyricsText: `
+[Verse 1]
+頭上綁著特色頭巾 笑容多溫暖
+雙手交叉在胸前 靠得住的肩膀
+工務的深色衣裳 穿梭在校園廣場
+明甡大哥 又是活力滿滿的一天
+
+[Chorus]
+噢 江明甡 江明甡 我們的超級夥伴
+熱心又親切 隨時準備好出發
+跟著孩子們 打成一片哈哈大笑
+有你在的地方 就像太陽一樣閃亮
+
+[Verse 2]
+哪裡的課桌椅壞了 找你就沒錯
+口袋裡裝滿工具 什麼都難不倒
+下課鐘聲響起 孩子們圍著你轉
+最溫暖的守護者 大家都愛你呀
+
+[Chorus]
+噢 江明甡 江明甡 我們的超級夥伴
+熱心又親切 隨時準備好出發
+跟著孩子們 打成一片哈哈大笑
+有你在的地方 就像太陽一樣閃亮
+
+[Outro]
+謝謝你 默默的付出
+最溫暖的明甡大哥
+校園裡 有你真好
+`
+    },
+*/
+
+
+// 注意：陳天賜 在原始 Word 未提供網址與 ID；僅依原順序保留於此，不代表歸屬本區塊。
+// 原表格第 124 列：陳天賜（網址／ID 空白，保留待補；未產生虛構 ID）
+/*
+    "12": {
+        coverUrl: "陳天賜.png",
+        audioUrl: "陳天賜.mp3",
+        lyricsText: `
+[Verse 1]
+戴著棒球帽 穿上針織背心
+天賜大哥在校門口 迎接每個清晨
+比個OK的手勢 帶著溫暖笑顏
+「平和」的問候 融化了冬天的冷
+
+[Chorus]
+天賜大哥 守護著我們的安全
+你的笑容 像陽光一樣耀眼
+「笑和」的氛圍 迴盪在校園
+有你在的身邊 每天都是晴天
+
+[Verse 2]
+身旁的小鳥 唱著快樂的歌
+盆栽的蘭花 靜靜陪著你呢
+不論風雨有多大 你依然堅守著
+用最溫柔的心 守護著每一刻
+
+[Chorus]
+天賜大哥 守護著我們的安全
+你的笑容 像陽光一樣耀眼
+「笑和」的氛圍 迴盪在校園
+有你在的身邊 每天都是晴天
+
+[Outro]
+謝謝你 天賜大哥
+那最美的「笑顏」
+我們會一直記得
+這份平安的甜
+`
+    },
+*/
+
+
+// 注意：陳志宏 在原始 Word 未提供網址與 ID；僅依原順序保留於此，不代表歸屬本區塊。
+// 原表格第 77 列：陳志宏（網址／ID 空白，保留待補；未產生虛構 ID）
+/*
+    "11": {
+        coverUrl: "陳志宏.png",
+        audioUrl: "陳志宏.mp3",
+        lyricsText: `
+[Verse 1]
+藍色襯衫 精神抖擻的模樣
+校園的每個角落 都有你忙碌的身影
+志宏大哥 帶著溫暖的微笑
+總務處的守護者 默默散發著光芒
+
+[Chorus]
+工務夥伴 陳志宏 汗水化作最美的彩虹
+水電修繕 樣樣精通 守護校園的每一刻輕鬆
+有你在的地方 就有安心的風
+
+[Verse 2]
+手持工具 解決所有的難題
+細微的關懷 藏在溫柔的眼角裡
+不求回報 只願大家平安順意
+聽那校園裡的歌聲 都是對你的謝意
+
+[Chorus]
+工務夥伴 陳志宏 汗水化作最美的彩虹
+水電修繕 樣樣精通 守護校園的每一刻輕鬆
+有你在的地方 就有安心的風
+
+[Outro]
+謝謝你 志宏大哥
+藍襯衫的背影 最溫暖的守候
+默默奉獻 照亮我們的每一天
+`
+    }
+*/
+
+            
         };
 
         document.addEventListener('DOMContentLoaded', () => {
@@ -195,8 +624,6 @@
             const durationTimeEl = document.getElementById('duration-time');
 
             let isAudioLoaded = false;
-            let parsedLyrics = []; 
-            let currentLyricIndex = -1; 
             let hasAttemptedAutoplay = false;
 
             // 輔助函式：時間格式化為 MM:SS
@@ -207,34 +634,16 @@
                 return `${minutes}:${seconds.toString().padStart(2, '0')}`;
             }
 
-            function parseLRC(lrcString) {
-                const lines = lrcString.split('\n');
-                const result = [];
-                const timeReg = /\[(\d{2}):(\d{2})\.(\d{2,3})\]/;
-                
-                for (let line of lines) {
-                    const match = line.match(timeReg);
-                    if (match) {
-                        const min = parseInt(match[1]);
-                        const sec = parseInt(match[2]);
-                        const ms = parseInt(match[3].padEnd(3, '0')); 
-                        const time = min * 60 + sec + ms / 1000;
-                        const text = line.replace(timeReg, '').trim();
-                        if (text) {
-                            result.push({ time: time, text: text });
-                        }
-                    }
-                }
-                return result;
-            }
-
-            function renderLyrics(lyrics) {
+            // 渲染純文字歌詞
+            function renderLyrics(text) {
                 lyricsContainer.innerHTML = ''; 
-                lyrics.forEach((lyric, index) => {
+                const lines = text.split('\n');
+                lines.forEach((line) => {
+                    const trimmedLine = line.trim();
                     const div = document.createElement('div');
-                    div.className = 'lyric-line py-3 px-4 text-base text-gray-500 font-medium min-h-[20px]';
-                    div.id = `lyric-${index}`;
-                    div.innerText = lyric.text;
+                    // 沒有時間高亮了，直接把文字調亮 (text-gray-300)
+                    div.className = 'lyric-line py-2 px-4 text-base text-gray-300 font-medium min-h-[28px]';
+                    div.innerText = trimmedLine;
                     lyricsContainer.appendChild(div);
                 });
             }
@@ -258,11 +667,10 @@
                 cover.src = userData.coverUrl;
                 audio.src = userData.audioUrl;
 
-                if (userData.lrc) {
-                    parsedLyrics = parseLRC(userData.lrc);
-                    renderLyrics(parsedLyrics);
+                if (userData.lyricsText) {
+                    renderLyrics(userData.lyricsText);
                 } else {
-                    lyricsContainer.innerHTML = '<div class="lyric-line text-gray-500 py-3">無歌詞資料</div>';
+                    lyricsContainer.innerHTML = '<div class="lyric-line text-gray-400 py-3">無歌詞資料</div>';
                 }
 
                 cover.onload = () => {
@@ -308,34 +716,12 @@
                 isScrubbing = false;
             });
 
-            // 音樂時間更新邏輯
+            // 音樂時間更新邏輯 (現在只負責更新進度條，不再連動歌詞)
             audio.addEventListener('timeupdate', () => {
                 // 如果使用者沒有在拖曳進度條，自動更新進度條數值
                 if (!isScrubbing) {
                     progressBar.value = audio.currentTime;
                     currentTimeEl.innerText = formatTime(audio.currentTime);
-                }
-
-                if (parsedLyrics.length === 0) return;
-                
-                const currentTime = audio.currentTime;
-                let newIndex = parsedLyrics.findIndex((lyric, index) => {
-                    const nextTime = parsedLyrics[index + 1] ? parsedLyrics[index + 1].time : Infinity;
-                    return currentTime >= lyric.time && currentTime < nextTime;
-                });
-
-                if (newIndex !== -1 && newIndex !== currentLyricIndex) {
-                    if (currentLyricIndex !== -1) {
-                        const oldElement = document.getElementById(`lyric-${currentLyricIndex}`);
-                        if (oldElement) oldElement.classList.remove('active');
-                    }
-                    
-                    const newElement = document.getElementById(`lyric-${newIndex}`);
-                    if (newElement) {
-                        newElement.classList.add('active');
-                        // 自動滾動邏輯已移除，讓使用者自由瀏覽
-                    }
-                    currentLyricIndex = newIndex;
                 }
             });
 
