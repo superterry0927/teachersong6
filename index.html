@@ -32,7 +32,6 @@
             border: 2px solid #111;
         }
 
-        /* Spinning Record / Cover Art Animation */
         .cover-art {
             animation: spin 6s linear infinite;
             animation-play-state: paused;
@@ -43,44 +42,30 @@
             100% { transform: rotate(360deg); } 
         }
 
-        /* Lyrics Container with Native Scrolling & Masking */
         .lyrics-wrapper {
             background-color: rgba(0, 0, 0, 0.2);
             box-shadow: inset 0 4px 15px rgba(0,0,0,0.4);
             border: 1px solid rgba(255,255,255,0.05);
             overflow-y: auto;
-            /* 縮小遮罩範圍，讓純文字閱讀更舒適 */
             -webkit-mask-image: linear-gradient(to bottom, transparent 0%, black 5%, black 95%, transparent 100%);
             mask-image: linear-gradient(to bottom, transparent 0%, black 5%, black 95%, transparent 100%);
-            /* 開啟捲軸支援 (移除隱藏捲軸的屬性) */
             scrollbar-width: thin;
             scrollbar-color: rgba(255,255,255,0.2) transparent;
         }
 
-        /* 針對 Webkit 瀏覽器客製化捲軸樣式 */
-        .lyrics-wrapper::-webkit-scrollbar { 
-            width: 6px; 
-        }
-        .lyrics-wrapper::-webkit-scrollbar-track {
-            background: transparent;
-        }
-        .lyrics-wrapper::-webkit-scrollbar-thumb {
-            background-color: rgba(255, 255, 255, 0.2);
-            border-radius: 10px;
-        }
-        .lyrics-wrapper::-webkit-scrollbar-thumb:hover {
-            background-color: rgba(255, 255, 255, 0.4);
-        }
+        .lyrics-wrapper::-webkit-scrollbar { width: 6px; }
+        .lyrics-wrapper::-webkit-scrollbar-track { background: transparent; }
+        .lyrics-wrapper::-webkit-scrollbar-thumb { background-color: rgba(255, 255, 255, 0.2); border-radius: 10px; }
+        .lyrics-wrapper::-webkit-scrollbar-thumb:hover { background-color: rgba(255, 255, 255, 0.4); }
 
         .lyrics-container {
-            padding: 20px 0; /* 移除原本為了置中而留下的大量空白，改為正常間距 */
+            padding: 20px 0;
         }
-
+        
         .lyric-line {
-            transition: color 0.3s ease, text-shadow 0.3s ease, transform 0.3s ease;
+            transition: color 0.3s ease, text-shadow 0.3s ease;
         }
 
-        /* Progress Bar Styling */
         input[type=range] {
             -webkit-appearance: none;
             background: transparent;
@@ -103,7 +88,6 @@
             border-radius: 2px;
         }
 
-        /* Hardware Buttons */
         .control-btn {
             box-shadow: 0px 6px 0px #111, 0px 10px 15px rgba(0,0,0,0.5);
             transition: transform 0.1s, box-shadow 0.1s, filter 0.2s;
@@ -136,14 +120,13 @@
         <div class="tape-window flex-none h-[35%] rounded-2xl flex justify-center items-center overflow-hidden relative mb-5">
             <div class="loading-text absolute text-gray-400 font-bold text-sm z-10" id="status-text">載入中...</div>
             <img src="" alt="Cover Art" class="cover-art w-40 h-40 rounded-full object-cover z-20 hidden border-4 border-gray-900" id="cover">
-            <!-- Decorative center hole for the vinyl look -->
             <div class="absolute w-4 h-4 bg-gray-900 rounded-full z-30 shadow-inner"></div>
         </div>
 
-        <!-- Dynamic Lyrics Area -->
+        <!-- Lyrics Area -->
         <div class="lyrics-wrapper flex-1 rounded-xl relative" id="lyrics-wrapper">
             <div class="lyrics-container w-full text-center" id="lyrics-container">
-                <!-- Lyrics will be generated here -->
+                <!-- Lyrics populated by JS -->
             </div>
         </div>
         
@@ -155,21 +138,17 @@
         </div>
 
         <div class="controls flex justify-between px-2 mt-2">
-            <audio id="audio-player" preload="auto"></audio>
+            <audio id="audio-player" preload="metadata"></audio>
             
             <button id="play-btn" class="control-btn w-[46%] h-[60px] rounded-xl border-none font-black text-lg tracking-widest text-white cursor-pointer outline-none" disabled>PLAY</button>
             <button id="stop-btn" class="control-btn w-[46%] h-[60px] rounded-xl border-none font-black text-lg tracking-widest text-white cursor-pointer outline-none" disabled>STOP</button>
-        </div>
-
-        <div id="error-msg" class="text-[#ff471a] text-center text-sm mt-4 font-bold hidden">
-            找不到對應的資料。
         </div>
     </div>
 
     <script>
         const mediaDatabase = {
-           
-     "1": {
+                          
+    "1": {
         coverUrl: "簡瑞男.png",
         audioUrl: "簡瑞男.mp3",
         lyricsText: `
@@ -604,8 +583,7 @@ Thank you, we love you!
     }
 */
 
-            
-        };
+             };
 
         document.addEventListener('DOMContentLoaded', () => {
             const urlParams = new URLSearchParams(window.location.search);
@@ -617,16 +595,13 @@ Thank you, we love you!
             const stopBtn = document.getElementById('stop-btn');
             const statusText = document.getElementById('status-text');
             const lyricsContainer = document.getElementById('lyrics-container');
-            const lyricsWrapper = document.getElementById('lyrics-wrapper');
-            
             const progressBar = document.getElementById('progress-bar');
             const currentTimeEl = document.getElementById('current-time');
             const durationTimeEl = document.getElementById('duration-time');
 
-            let isAudioLoaded = false;
             let hasAttemptedAutoplay = false;
+            let isScrubbing = false;
 
-            // 輔助函式：時間格式化為 MM:SS
             function formatTime(timeInSeconds) {
                 if (isNaN(timeInSeconds)) return "0:00";
                 const minutes = Math.floor(timeInSeconds / 60);
@@ -634,16 +609,14 @@ Thank you, we love you!
                 return `${minutes}:${seconds.toString().padStart(2, '0')}`;
             }
 
-            // 渲染純文字歌詞
             function renderLyrics(text) {
                 lyricsContainer.innerHTML = ''; 
                 const lines = text.split('\n');
                 lines.forEach((line) => {
                     const trimmedLine = line.trim();
                     const div = document.createElement('div');
-                    // 沒有時間高亮了，直接把文字調亮 (text-gray-300)
-                    div.className = 'lyric-line py-2 px-4 text-base text-gray-300 font-medium min-h-[28px]';
-                    div.innerText = trimmedLine;
+                    div.className = 'lyric-line py-2 px-6 text-lg text-[#e0e0e0] font-semibold min-h-[32px] tracking-wide leading-relaxed';
+                    div.innerText = trimmedLine || ' '; 
                     lyricsContainer.appendChild(div);
                 });
             }
@@ -652,14 +625,23 @@ Thank you, we love you!
                 if (hasAttemptedAutoplay) return;
                 hasAttemptedAutoplay = true;
 
-                audio.play().then(() => {
-                    cover.style.animationPlayState = 'running';
-                    statusText.style.display = 'none';
-                }).catch(error => {
-                    console.warn("Autoplay prevented by browser:", error);
-                    statusText.innerText = "請點擊 PLAY 播放";
-                    statusText.style.display = 'block';
-                });
+                let playPromise = audio.play();
+                if (playPromise !== undefined) {
+                    playPromise.then(() => {
+                        cover.style.animationPlayState = 'running';
+                        statusText.style.display = 'none';
+                    }).catch(error => {
+                        // 當瀏覽器（例如手機掃描 NFC 後）阻擋自動播放時，顯示明顯的提示
+                        console.warn("Autoplay prevented:", error);
+                        statusText.innerText = "⬇️ 點擊下方 PLAY 播放 ⬇️";
+                        statusText.style.color = '#ff5e3a';
+                        statusText.style.fontSize = '14px';
+                        statusText.style.display = 'block';
+                        statusText.style.backgroundColor = 'rgba(0,0,0,0.7)';
+                        statusText.style.padding = '6px 12px';
+                        statusText.style.borderRadius = '8px';
+                    });
+                }
             }
 
             if (mediaDatabase[userId] && mediaDatabase[userId].audioUrl !== "") {
@@ -673,38 +655,21 @@ Thank you, we love you!
                     lyricsContainer.innerHTML = '<div class="lyric-line text-gray-400 py-3">無歌詞資料</div>';
                 }
 
+                // 【手機 NFC 修正核心】
+                // 不等待音檔 oncanplay，直接解鎖按鈕，允許使用者手動點擊
+                playBtn.disabled = false;
+                stopBtn.disabled = false;
+
                 cover.onload = () => {
                     cover.style.display = 'block';
-                    if (!hasAttemptedAutoplay) {
-                        statusText.style.display = 'none';
-                    }
-                    if(isAudioLoaded) {
-                        playBtn.disabled = false;
-                        stopBtn.disabled = false;
-                        attemptAutoplay();
-                    }
+                    attemptAutoplay();
                 };
-
-                audio.oncanplay = () => {
-                    if (!isAudioLoaded) {
-                        isAudioLoaded = true;
-                        if (cover.style.display === 'block') {
-                            playBtn.disabled = false;
-                            stopBtn.disabled = false;
-                            attemptAutoplay();
-                        }
-                    }
-                };
-
-                // 當獲取音軌長度時，設定進度條最大值
-                audio.addEventListener('loadedmetadata', () => {
-                    progressBar.max = audio.duration;
-                    durationTimeEl.innerText = formatTime(audio.duration);
-                });
             }
 
-            // 進度條滑動與跳轉邏輯
-            let isScrubbing = false;
+            audio.addEventListener('loadedmetadata', () => {
+                progressBar.max = audio.duration;
+                durationTimeEl.innerText = formatTime(audio.duration);
+            });
 
             progressBar.addEventListener('input', () => {
                 isScrubbing = true;
@@ -716,9 +681,7 @@ Thank you, we love you!
                 isScrubbing = false;
             });
 
-            // 音樂時間更新邏輯 (現在只負責更新進度條，不再連動歌詞)
             audio.addEventListener('timeupdate', () => {
-                // 如果使用者沒有在拖曳進度條，自動更新進度條數值
                 if (!isScrubbing) {
                     progressBar.value = audio.currentTime;
                     currentTimeEl.innerText = formatTime(audio.currentTime);
@@ -729,7 +692,7 @@ Thank you, we love you!
                 audio.play().then(() => {
                     cover.style.animationPlayState = 'running';
                     statusText.style.display = 'none';
-                }).catch(error => console.log(error));
+                }).catch(error => console.log("Play error:", error));
             });
 
             stopBtn.addEventListener('click', () => {
@@ -739,8 +702,11 @@ Thank you, we love you!
             
             audio.addEventListener('ended', () => {
                 cover.style.animationPlayState = 'paused';
+                progressBar.value = 0;
+                currentTimeEl.innerText = "0:00";
             });
         });
     </script>
 </body>
 </html>
+
